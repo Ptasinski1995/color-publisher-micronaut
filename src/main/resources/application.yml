@@ -2,6 +2,13 @@ micronaut:
   application:
     name: mptasinski-co-brick-task
 
+mongodb:
+  uri: mongodb://username:password@localhost:27017/databaseName
+  cluster:
+    maxWaitQueueSize: 5
+    connectionPool:
+      maxSize: 20
+
 #there was a typo in the task *.yml example that gave me a nightmare here
 colors:
   mapping:

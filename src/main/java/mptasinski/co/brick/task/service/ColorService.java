@@ -1,5 +1,7 @@
 package mptasinski.co.brick.task.service;
 
+import io.reactivex.Flowable;
+import io.reactivex.functions.Predicate;
 import mptasinski.co.brick.task.api.model.Color;
 import mptasinski.co.brick.task.config.ColorsConfiguration;
 import mptasinski.co.brick.task.mapping.ColorMessageMapper;
@@ -9,9 +11,9 @@ import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import java.util.List;
+
 import java.util.Objects;
-import java.util.function.Predicate;
+import java.util.Optional;
 
 @Singleton
 public class ColorService {
@@ -27,16 +29,17 @@ public class ColorService {
     @Inject
     private ColorRabbitClient colorRabbitClient;
 
-    public void processColors(List<Color> colors) {
-        colors.stream()
+    public void processColors(Flowable<Color> colors) {
+        colors
                 .filter(Color::isPublish)
                 .map(colorsConfiguration::getColorName)
-                .filter(isNameCorrect(Objects::nonNull))
+                .filter(isNameCorrect(Optional::isPresent))
+                .map(Optional::get)
                 .map(colorMessageMapper::mapToColorMessageDto)
-                .forEach(colorRabbitClient::send);
+                .subscribe(colorRabbitClient::send);
     }
 
-    private Predicate<String> isNameCorrect(Predicate<String> predicate) {
+    private Predicate<Optional<String>> isNameCorrect(Predicate<Optional<String>> predicate) {
         return value -> {
             if (!predicate.test(value)) {
                 LOGGER.warn("Color value is incorrect and won't be processed further");

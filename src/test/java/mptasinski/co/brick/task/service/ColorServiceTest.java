@@ -2,6 +2,7 @@ package mptasinski.co.brick.task.service;
 
 import io.micronaut.test.annotation.MicronautTest;
 import io.micronaut.test.annotation.MockBean;
+import io.reactivex.Flowable;
 import mptasinski.co.brick.task.api.model.Color;
 import mptasinski.co.brick.task.dto.ColorMessageDto;
 import mptasinski.co.brick.task.mapping.ColorMessageMapper;
@@ -65,7 +66,7 @@ class ColorServiceTest {
         verify(colorRabbitClient, times(2)).send(any(ColorMessageDto.class));
     }
 
-    private List<Color> getGoodAndBadColors() {
+    private Flowable<Color> getGoodAndBadColors() {
         List<Color> colors = new ArrayList<>();
         colors.add(new Color("255,0,0", true));
         colors.add(new Color("0,255,0", true));
@@ -73,23 +74,23 @@ class ColorServiceTest {
         colors.add(new Color("0,0", true));
         colors.add(new Color("", true));
 
-        return colors;
+        return Flowable.fromIterable(colors);
     }
 
-    private List<Color> getOnlyGoodColors() {
+    private Flowable<Color> getOnlyGoodColors() {
         List<Color> colors = new ArrayList<>();
         colors.add(new Color("255,0,0", true));
         colors.add(new Color("0,255,0", true));
 
-        return colors;
+        return Flowable.fromIterable(colors);
     }
 
-    private List<Color> getOnlyBadColors() {
+    private Flowable<Color> getOnlyBadColors() {
         List<Color> colors = new ArrayList<>();
         colors.add(new Color("0,0", true));
         colors.add(new Color("", true));
 
-        return colors;
+        return Flowable.fromIterable(colors);
     }
 
 

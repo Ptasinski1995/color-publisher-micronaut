@@ -1,11 +1,9 @@
 package mptasinski.co.brick.task.api;
 
-import io.micronaut.core.type.Argument;
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.HttpStatus;
 import io.micronaut.http.MediaType;
-import io.micronaut.http.client.HttpClient;
 import io.micronaut.http.client.RxHttpClient;
 import io.micronaut.http.client.annotation.Client;
 import io.micronaut.test.annotation.MicronautTest;
@@ -22,8 +20,8 @@ import javax.inject.Inject;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.reset;
+
+import static org.mockito.Mockito.*;
 
 @MicronautTest
 class ColorsControllerTest {

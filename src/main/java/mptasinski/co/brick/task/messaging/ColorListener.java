@@ -1,9 +1,9 @@
 package mptasinski.co.brick.task.messaging;
 
-import io.micronaut.configuration.rabbitmq.annotation.Queue;
-import io.micronaut.configuration.rabbitmq.annotation.RabbitListener;
 import io.micronaut.context.annotation.Requires;
 import io.micronaut.context.env.Environment;
+import io.micronaut.rabbitmq.annotation.Queue;
+import io.micronaut.rabbitmq.annotation.RabbitListener;
 import mptasinski.co.brick.task.dto.ColorMessageDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

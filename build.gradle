@@ -1,6 +1,6 @@
 plugins {
-    id "net.ltgt.apt-eclipse" version "0.21"
-    id "com.github.johnrengelman.shadow" version "5.2.0"
+    id "com.diffplug.eclipse.apt" version "3.22.0"
+    id "com.github.johnrengelman.shadow" version "6.0.0"
     id "me.champeau.gradle.jmh" version "0.5.0"
     id "application"
 }
@@ -11,6 +11,8 @@ sourceSets {
 
 version "0.1"
 group "mptasinski.co.brick.task"
+
+sourceCompatibility = 8
 
 repositories {
     mavenCentral()
@@ -23,26 +25,29 @@ configurations {
 }
 
 dependencies {
-    annotationProcessor platform("io.micronaut:micronaut-bom:$micronautVersion")
-    annotationProcessor "io.micronaut:micronaut-inject-java"
-    annotationProcessor "io.micronaut:micronaut-validation"
-    implementation platform("io.micronaut:micronaut-bom:$micronautVersion")
-    implementation "io.micronaut:micronaut-inject"
-    implementation "io.micronaut:micronaut-validation"
-    implementation "io.micronaut:micronaut-runtime"
-    implementation "javax.annotation:javax.annotation-api"
-    implementation "io.micronaut:micronaut-http-server-netty"
-    implementation "io.micronaut:micronaut-http-client"
-    implementation "io.micronaut.configuration:micronaut-rabbitmq"
+    annotationProcessor(platform("io.micronaut:micronaut-bom:$micronautVersion"))
+    annotationProcessor("io.micronaut:micronaut-inject-java")
+    annotationProcessor("io.micronaut:micronaut-validation")
+    implementation(platform("io.micronaut:micronaut-bom:$micronautVersion"))
+    implementation("io.micronaut:micronaut-inject")
+    implementation("io.micronaut:micronaut-validation")
+    implementation("io.micronaut:micronaut-runtime")
+    implementation("javax.annotation:javax.annotation-api")
+    implementation("io.micronaut:micronaut-http-server-netty")
+    implementation("io.micronaut:micronaut-http-client")
+    implementation("io.micronaut.rabbitmq:micronaut-rabbitmq")
+    implementation("io.micronaut.mongodb:micronaut-mongo-reactive")
+    developmentOnly("io.micronaut:micronaut-runtime-osx:$micronautVersion")
     compile 'com.google.guava:guava:23.5-jre'
-    runtimeOnly "ch.qos.logback:logback-classic:1.2.3"
-    testAnnotationProcessor platform("io.micronaut:micronaut-bom:$micronautVersion")
-    testAnnotationProcessor "io.micronaut:micronaut-inject-java"
-    testImplementation platform("io.micronaut:micronaut-bom:$micronautVersion")
-    testImplementation "org.junit.jupiter:junit-jupiter-api"
-    testImplementation "io.micronaut.test:micronaut-test-junit5"
-    testImplementation "org.mockito:mockito-junit-jupiter:2.22.0"
-    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine"
+    runtimeOnly("ch.qos.logback:logback-classic")
+    testAnnotationProcessor(platform("io.micronaut:micronaut-bom:$micronautVersion"))
+    testAnnotationProcessor("io.micronaut:micronaut-inject-java")
+    testCompile 'org.mockito:mockito-core:1.10.19'
+    testImplementation(platform("io.micronaut:micronaut-bom:$micronautVersion"))
+    testImplementation("org.junit.jupiter:junit-jupiter-api")
+    testImplementation("io.micronaut.test:micronaut-test-junit5")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
+    testImplementation("de.flapdoodle.embed:de.flapdoodle.embed.mongo:2.0.1")
     compile 'org.openjdk.jmh:jmh-core:1.22'
     annotationProcessor 'org.openjdk.jmh:jmh-generator-annprocess:1.22'
 }

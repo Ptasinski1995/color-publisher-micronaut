@@ -8,6 +8,7 @@ import mptasinski.co.brick.task.api.model.Color;
 import javax.annotation.PostConstruct;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 
 @ConfigurationProperties("colors")
@@ -18,18 +19,10 @@ public class ColorsConfiguration {
 
     @PostConstruct
     public void setUp() {
-        colorsBiMap = HashBiMap.create(mapping);
+        colorsBiMap = HashBiMap.create(mapping).inverse();
     }
 
-    public Map<String, String> getMapping() {
-        return mapping;
-    }
-
-    public void setMapping(Map<String, String> mapping) {
-        this.mapping = mapping;
-    }
-
-    public String getColorName(Color color) {
-        return colorsBiMap.inverse().get(color.getColor());
+    public Optional<String> getColorName(Color color) {
+        return Optional.ofNullable(colorsBiMap.get(color.getColor()));
     }
 }
