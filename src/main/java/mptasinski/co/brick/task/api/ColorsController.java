@@ -7,11 +7,10 @@ import io.micronaut.http.annotation.Post;
 import io.reactivex.Flowable;
 import io.reactivex.Single;
 import mptasinski.co.brick.task.api.model.Color;
-import mptasinski.co.brick.task.api.model.ColorRequest;
 import mptasinski.co.brick.task.api.model.ColorResponse;
 import mptasinski.co.brick.task.service.ColorService;
 
-import javax.inject.Inject;
+import java.util.List;
 
 @Controller
 public class ColorsController {
@@ -23,10 +22,12 @@ public class ColorsController {
     }
 
     @Post(value = "/publish")
-    public Single<HttpResponse<ColorResponse>> publish(@Body Flowable<Color> colors) {
-        colorService.processColors(colors);
+    public Single<HttpResponse<ColorResponse>> publish(@Body List<Color> colors) {
+        Flowable<Color> colorFlowable = Flowable.fromIterable(colors);
+        colorService.processColors(colorFlowable)
+                .subscribe();
 
-       return Single.just(HttpResponse.ok(new ColorResponse()));
+        return Single.just(HttpResponse.ok(new ColorResponse()));
 
     }
 }

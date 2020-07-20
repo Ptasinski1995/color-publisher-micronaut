@@ -43,7 +43,7 @@ Once RabbitMQ is up and running there is nothing stopping you from running:
 
 Application will start on port 8080, to confirm its behaviour try:
 
-> curl -i  -H "Content-Type: application/json" -H "Accept: application/json" -w "\n" -d '{ "colors": [{"color": "255,0,0", "publish":true}]}' localhost:8080/publish   
+> curl -i  -H "Content-Type: application/json" -H "Accept: application/json" -w "\n" -d '[{"color": "255,0,0", "publish":true}]' localhost:8080/publish   
 
 You can add as many colors to the list as you want. However just this one call is enough to confirm that message has been send to the queue and read from it. 
 Inside of a httpRequests folder you can also find ready to use IntelliJ Http Request.

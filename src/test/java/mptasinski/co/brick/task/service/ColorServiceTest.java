@@ -3,6 +3,7 @@ package mptasinski.co.brick.task.service;
 import io.micronaut.test.annotation.MicronautTest;
 import io.micronaut.test.annotation.MockBean;
 import io.reactivex.Flowable;
+import io.reactivex.subscribers.TestSubscriber;
 import mptasinski.co.brick.task.api.model.Color;
 import mptasinski.co.brick.task.dto.ColorMessageDto;
 import mptasinski.co.brick.task.mapping.ColorMessageMapper;
@@ -31,11 +32,17 @@ class ColorServiceTest {
     @Test
     void testProcessColorsAllGood() {
         //for
+        TestSubscriber<ColorMessageDto> testSubscriber = new TestSubscriber<>();
+
         when(colorMessageMapper.mapToColorMessageDto(anyString())).thenReturn(new ColorMessageDto());
         //when
-        colorService.processColors(getOnlyGoodColors());
+        colorService.processColors(getOnlyGoodColors())
+                .subscribe(testSubscriber);
 
         //then
+        testSubscriber.assertComplete();
+        testSubscriber.assertNoErrors();
+        testSubscriber.assertValueCount(2);
         verify(colorMessageMapper, times(2)).mapToColorMessageDto(any());
         verify(colorRabbitClient, times(2)).send(any(ColorMessageDto.class));
 
@@ -44,24 +51,37 @@ class ColorServiceTest {
     @Test
     void testProcessColorsAllBad() {
         //for
+        TestSubscriber<ColorMessageDto> testSubscriber = new TestSubscriber<>();
+
         when(colorMessageMapper.mapToColorMessageDto(anyString())).thenReturn(new ColorMessageDto());
 
         //when
-        colorService.processColors(getOnlyBadColors());
+        colorService.processColors(getOnlyBadColors())
+                .subscribe(testSubscriber);
 
         //then
+        testSubscriber.assertComplete();
+        testSubscriber.assertNoErrors();
+        testSubscriber.assertValueCount(0);
         verify(colorMessageMapper, times(0)).mapToColorMessageDto(anyString());
         verify(colorRabbitClient, times(0)).send(any(ColorMessageDto.class));
     }
 
     @Test
     void testProcessBadAndGoodColors() {
+        //for
+        TestSubscriber<ColorMessageDto> testSubscriber = new TestSubscriber<>();
+
         when(colorMessageMapper.mapToColorMessageDto(anyString())).thenReturn(new ColorMessageDto());
 
         //when
-        colorService.processColors(getGoodAndBadColors());
+        colorService.processColors(getGoodAndBadColors())
+                .subscribe(testSubscriber);
 
         //then
+        testSubscriber.assertComplete();
+        testSubscriber.assertNoErrors();
+        testSubscriber.assertValueCount(2);
         verify(colorMessageMapper, times(2)).mapToColorMessageDto(anyString());
         verify(colorRabbitClient, times(2)).send(any(ColorMessageDto.class));
     }

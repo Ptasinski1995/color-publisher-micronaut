@@ -18,6 +18,9 @@ import javax.inject.Inject;
 
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -39,7 +42,7 @@ class ColorsControllerTest {
     @Test
     void testPublishColors() {
         //for
-        HttpRequest<ColorRequest> httpRequest = HttpRequest.POST("/publish", colorRequest()).accept(MediaType.APPLICATION_JSON_TYPE);
+        HttpRequest<List<Color>> httpRequest = HttpRequest.POST("/publish", colorRequest()).accept(MediaType.APPLICATION_JSON_TYPE);
 
         //when
         HttpResponse<ColorResponse> response = client.toBlocking().exchange(httpRequest, ColorResponse.class);
@@ -50,12 +53,8 @@ class ColorsControllerTest {
         assertTrue(response.getBody().get().isPublished());
     }
 
-    private ColorRequest colorRequest() {
-        ColorRequest colorRequest = new ColorRequest();
-        colorRequest.setColors(new ArrayList<>());
-        colorRequest.getColors().add(new Color("255,0,0", true));
-
-        return colorRequest;
+    private List<Color> colorRequest() {
+        return Collections.singletonList(new Color("255,0,0", true));
     }
 
 
